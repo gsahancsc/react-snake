@@ -20,12 +20,12 @@ function App() {
   const setup= () => {
     const boxes = [];
     for (let i = 0; i < horizontalLimit*verticalLimit; i++) {
-      boxes.push({cls:'box', id: i});
+      boxes.push({cls:'boxx', id: i});
     }
 
     snake.forEach( item => {
       const index = item.x * horizontalLimit + item.y;
-      boxes[index].cls = 'box red';
+      boxes[index].cls = 'boxx red';
     });
     setBoard(boxes);
   };
@@ -50,7 +50,7 @@ function App() {
     const last_item = snake[snake.length-1];
     let index = last_item.x * horizontalLimit + last_item.y;
     if (index < 0 || index >= boxess.length) return;
-    boxess[index].cls = 'box'; 
+    boxess[index].cls = 'boxx'; 
     
     for(let i=snake.length-1; i>0;i--) {
       snake[i] = {...snake[i-1]}
@@ -75,7 +75,7 @@ function App() {
 
     index = snake[0].x * horizontalLimit + snake[0].y;
     if(!stopIfCollisionDetected()) {
-      boxess[index].cls = 'box red';
+      boxess[index].cls = 'boxx red';
       if(index == food) {
          snake.push( {...snake[snake.length-1]});
          //setSnake(snake);
@@ -112,7 +112,7 @@ function App() {
   
   useEffect(()=>{
     if(!food) return;
-    board[food].cls = 'food box';
+    board[food].cls = 'food boxx';
   },[food]);
 
   useEffect(()=>{
