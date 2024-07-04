@@ -3,12 +3,11 @@ import { useState, useEffect} from 'react'
 function App() {
   const { innerWidth: width, innerHeight: height } = window;
   const [board, setBoard] = useState(null);
-  const [intervalId, setIntervalId] = useState(null);
-  const [direction,setDirection] = useState('ArrowRight');
+  const [direction,setDirection] = useState('none');
   const [speed,setSpeed] = useState(50);
   const [started,setStarted] = useState(false);
   const [is_gameOver,gameOver] = useState(false);
-  const snakeFirstPosition = [{x:0,y:3},{x:0,y:2},{x:0,y:1},{x:0,y:0}];
+  const snakeFirstPosition = [{x:5,y:4},{x:5,y:3},{x:5,y:2},{x:5,y:1}];
   const [snake,setSnake] = useState(snakeFirstPosition);
 
   const boxSizePx = 20;
@@ -80,36 +79,16 @@ function App() {
     }
   };
 
-  const startStop=()=>{
-    if(intervalId){
-      setStarted(false);
-    }
-    else{
-      setStarted(true);
-    }
-  };
-
-  const start=()=>{
-    const interval = setInterval(()=>{move()},speed);
-    setIntervalId(interval);
-    console.log('interval started:',interval);
-    return interval;
-  };
-
-  const stop=()=>{
-    clearInterval(intervalId);
-    console.log('interval killed:',intervalId);
-  }
 
   const handleDirectionChange = (event) => {
     const new_key = event.key;
     if(!started && !is_gameOver) setStarted(true);
 
-    if(new_key == direction) return;
     if(new_key == "ArrowRight" &&  direction == "ArrowLeft") return;
     if(new_key == "ArrowLeft" &&  direction == "ArrowRight") return;
     if(new_key == "ArrowUp" &&  direction == "ArrowDown") return;
     if(new_key == "ArrowDown" &&  direction == "ArrowUp") return;
+    console.log(new_key);
 
     setDirection(event.key);
   };
@@ -120,42 +99,34 @@ function App() {
 
   useEffect(()=>{
     if(is_gameOver){
-      setDirection("ArrowRight");
-      console.log("gameOver")
+      setDirection("none");
       setup();
       gameOver(false);
     }
   },[is_gameOver]);
 
   useEffect(()=>{
-    if(started){
-      stop();
-      var interval = start();
-    }
-    else{
-      stop();
-    }
-    return () => clearInterval(interval);
+
   },[started]);
 
   useEffect(()=>{
     window.addEventListener('keydown', handleDirectionChange);
-      if(started) {
-        stop();
-        var interval = start();
-      }
+    if(started)
+      var intervalid = setInterval(() => {
+        move();
+      }, speed);
+
     return () => {
-      clearInterval(interval);
+      clearInterval(intervalid);
       window.removeEventListener('keydown', handleDirectionChange);
     }
-  },[speed,direction]);
+  },[speed,direction,board]);
 
   return (
     <div className="App" >
       <div className="box-container">
         {board && board.map((item) => <div className={item.cls} key={item.id} ></div> )}
       </div>
-      <button style={{'display':'fixed'}} onClick={()=>{startStop()}}>start</button>
     </div>
   );
 }
