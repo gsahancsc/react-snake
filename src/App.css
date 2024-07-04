@@ -61,7 +61,7 @@
 }
 
 .boxx {
-  border-style:inherit;
+  border-style: solid;
   border-color: lightgray;
   border-width: 1px;
   width: 18px;
