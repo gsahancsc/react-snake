@@ -78,19 +78,20 @@ function App() {
       boxess[index].cls = 'boxx red';
       if(index == food) {
          snake.push( {...snake[snake.length-1]});
-         //setSnake(snake);
          setFood(null);
          feedSnake();
          setCurrentScore(currentScore+1);
       }
+      drawFood();
       setBoard(boxess);
     }
   };
 
   const handleDirectionChange = (event) => {
+    if(event.keyCode < 37 || event.keyCode > 40) return;
+
     const new_key = event.key;
     if(!started && !is_gameOver) setStarted(true);
-
     if(new_key == "ArrowRight" &&  direction == "ArrowLeft") return;
     if(new_key == "ArrowLeft" &&  direction == "ArrowRight") return;
     if(new_key == "ArrowUp" &&  direction == "ArrowDown") return;
@@ -99,6 +100,10 @@ function App() {
     setDirection(event.key);
   };
 
+  const drawFood=()=>{
+    if(food)
+      board[food].cls = 'food boxx';
+  }
   const feedSnake=()=>{
     if(!board) return;
     const index = Math.floor(Math.random() * board.length-5)+2;
@@ -112,7 +117,7 @@ function App() {
   
   useEffect(()=>{
     if(!food) return;
-    board[food].cls = 'food boxx';
+    drawFood();
   },[food]);
 
   useEffect(()=>{
@@ -127,7 +132,7 @@ function App() {
   },[is_gameOver]);
 
   useEffect(()=>{
-    feedSnake();
+    if(started) feedSnake();
   },[started]);
 
   useEffect(()=>{
