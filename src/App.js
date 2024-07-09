@@ -76,13 +76,13 @@ function App() {
     index = snake[0].x * horizontalLimit + snake[0].y;
     if(!stopIfCollisionDetected()) {
       boxess[index].cls = 'boxx red';
+      drawFood();
       if(index == food) {
          snake.push( {...snake[snake.length-1]});
          setFood(null);
          feedSnake();
          setCurrentScore(currentScore+1);
       }
-      drawFood();
       setBoard(boxess);
     }
   };
@@ -101,13 +101,15 @@ function App() {
   };
 
   const drawFood=()=>{
-    if(food)
+    if(food){
       board[food].cls = 'food boxx';
+    }
   }
   const feedSnake=()=>{
     if(!board) return;
     const index = Math.floor(Math.random() * board.length-5)+2;
     setFood(index);
+    setup();
   }
 
   useEffect(()=>{
